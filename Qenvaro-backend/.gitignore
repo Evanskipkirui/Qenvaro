@@ -1,0 +1,27 @@
+# Environment variables - NEVER commit this file
+.env
+
+# Go build output
+qenvaro-backend
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go test cache
+*.test
+*.out
+
+# Dependency directory
+vendor/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
