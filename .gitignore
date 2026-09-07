@@ -1,0 +1,10 @@
+# VS Code settings — editor config, not project code
+.vscode/
+
+# Environment files — contain secrets, never commit these
+.env
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
