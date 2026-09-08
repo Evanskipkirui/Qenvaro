@@ -2,71 +2,94 @@
 // HOME PAGE
 // ============================================================
 
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  Laptop, Smartphone, Headphones, Keyboard, Monitor, Cable,
-  Truck, ShieldCheck, RotateCcw, Search,
-} from 'lucide-react';
-import ProductCard from '../components/ProductCard';
-import { useProducts } from '../context/ProductContext';
-import { categories } from '../data/products';
+  Laptop,
+  Smartphone,
+  Headphones,
+  Keyboard,
+  Monitor,
+  Cable,
+  Truck,
+  ShieldCheck,
+  RotateCcw,
+  Search,
+} from "lucide-react";
+import ProductCard from "../components/ProductCard";
+import { useProducts } from "../context/ProductContext";
+import { categories } from "../data/products";
 
 // Category icons — increased to 40px for the new circular style
 const categoryIcons: Record<string, React.ReactNode> = {
-  Laptops:     <Laptop     size={40} aria-hidden="true" />,
+  Laptops: <Laptop size={40} aria-hidden="true" />,
   Smartphones: <Smartphone size={40} aria-hidden="true" />,
-  Headphones:  <Headphones size={40} aria-hidden="true" />,
-  Keyboards:   <Keyboard   size={40} aria-hidden="true" />,
-  Monitors:    <Monitor    size={40} aria-hidden="true" />,
-  Accessories: <Cable      size={40} aria-hidden="true" />,
+  Headphones: <Headphones size={40} aria-hidden="true" />,
+  Keyboards: <Keyboard size={40} aria-hidden="true" />,
+  Monitors: <Monitor size={40} aria-hidden="true" />,
+  Accessories: <Cable size={40} aria-hidden="true" />,
 };
 
 // Soft background tint per category — keeps the purple identity but adds personality
 const categoryColors: Record<string, string> = {
-  Laptops:     '#eef2ff',
-  Smartphones: '#f0fdf4',
-  Headphones:  '#fdf4ff',
-  Keyboards:   '#fff7ed',
-  Monitors:    '#eff6ff',
-  Accessories: '#fefce8',
+  Laptops: "#eef2ff",
+  Smartphones: "#f0fdf4",
+  Headphones: "#fdf4ff",
+  Keyboards: "#fff7ed",
+  Monitors: "#eff6ff",
+  Accessories: "#fefce8",
 };
 
 const categoryIconColors: Record<string, string> = {
-  Laptops:     '#4f46e5',
-  Smartphones: '#16a34a',
-  Headphones:  '#9333ea',
-  Keyboards:   '#ea580c',
-  Monitors:    '#2563eb',
-  Accessories: '#ca8a04',
+  Laptops: "#4f46e5",
+  Smartphones: "#16a34a",
+  Headphones: "#9333ea",
+  Keyboards: "#ea580c",
+  Monitors: "#2563eb",
+  Accessories: "#ca8a04",
 };
 
 // Trust strip items
 const trustItems = [
-  { icon: <Truck size={22} aria-hidden="true" />,         label: 'Free Delivery',    desc: 'On orders over $50' },
-  { icon: <ShieldCheck size={22} aria-hidden="true" />,   label: 'Secure Payments',  desc: '100% protected' },
-  { icon: <RotateCcw size={22} aria-hidden="true" />,     label: 'Easy Returns',     desc: '30-day return policy' },
-  { icon: <Headphones size={22} aria-hidden="true" />,    label: '24/7 Support',     desc: "We're here to help" },
+  {
+    icon: <Truck size={22} aria-hidden="true" />,
+    label: "Free Delivery",
+    desc: "On orders over $50",
+  },
+  {
+    icon: <ShieldCheck size={22} aria-hidden="true" />,
+    label: "Secure Payments",
+    desc: "100% protected",
+  },
+  {
+    icon: <RotateCcw size={22} aria-hidden="true" />,
+    label: "Easy Returns",
+    desc: "30-day return policy",
+  },
+  {
+    icon: <Headphones size={22} aria-hidden="true" />,
+    label: "24/7 Support",
+    desc: "We're here to help",
+  },
 ];
 
 export default function Home() {
-  const { products } = useProducts();
+  const { products, loadingProducts } = useProducts();
   const navigate = useNavigate();
-  const [heroSearch, setHeroSearch] = useState('');
+  const [heroSearch, setHeroSearch] = useState("");
 
-  const featuredProducts = products.filter((p) => p.featured);
+  const featuredProducts = products.slice(0, 4);
 
   function handleHeroSearch(e: React.FormEvent) {
     e.preventDefault();
     if (heroSearch.trim()) {
       navigate(`/products?search=${encodeURIComponent(heroSearch.trim())}`);
-      setHeroSearch('');
+      setHeroSearch("");
     }
   }
 
   return (
     <div className="home-page">
-
       {/* ── HERO ── */}
       <section className="hero">
         <div className="hero-inner">
@@ -78,12 +101,17 @@ export default function Home() {
               Tech Worth <span className="highlight">Exploring</span>
             </h1>
             <p className="hero-subtitle">
-              Shop the latest laptops, smartphones, headphones, and more — all in one place.
+              Shop the latest laptops, smartphones, headphones, and more — all
+              in one place.
             </p>
 
             {/* Hero search bar — desktop only */}
             <form className="hero-search" onSubmit={handleHeroSearch}>
-              <Search size={18} className="hero-search-icon" aria-hidden="true" />
+              <Search
+                size={18}
+                className="hero-search-icon"
+                aria-hidden="true"
+              />
               <input
                 type="text"
                 placeholder="Search products, brands, categories..."
@@ -102,7 +130,10 @@ export default function Home() {
               <Link to="/products" className="btn btn-primary btn-lg">
                 Shop Now
               </Link>
-              <Link to="/products?category=Laptops" className="btn btn-hero-outline btn-lg">
+              <Link
+                to="/products?category=Laptops"
+                className="btn btn-hero-outline btn-lg"
+              >
                 Browse Categories
               </Link>
             </div>
@@ -154,81 +185,102 @@ export default function Home() {
 
       {/* ── Page content wrapper (adds padding back) ── */}
       <div className="home-content">
-
-      {/* ── CATEGORIES ── */}
-      <section className="section categories-section">
-        <div className="section-header">
-          <div>
-            <p className="section-overline">BROWSE</p>
-            <h2>Shop by Category</h2>
+        {/* ── CATEGORIES ── */}
+        <section className="section categories-section">
+          <div className="section-header">
+            <div>
+              <p className="section-overline">BROWSE</p>
+              <h2>Shop by Category</h2>
+            </div>
+            <p className="section-sub">
+              Browse our wide range of tech products
+            </p>
           </div>
-          <p className="section-sub">Browse our wide range of tech products</p>
-        </div>
-        <div className="categories-grid">
-          {categories.filter((c) => c !== 'All').map((cat) => (
-            <button
-              key={cat}
-              className="category-card"
-              onClick={() => navigate(`/products?category=${cat}`)}
-              aria-label={`Browse ${cat}`}
-              style={{
-                '--cat-bg': categoryColors[cat] || 'var(--primary-light)',
-                '--cat-color': categoryIconColors[cat] || 'var(--primary)',
-              } as React.CSSProperties}
-            >
-              <span className="category-circle">
-                <span className="category-icon" style={{ color: categoryIconColors[cat] }}>
-                  {categoryIcons[cat]}
-                </span>
-              </span>
-              <span className="category-name">{cat}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* ── FEATURED PRODUCTS ── */}
-      <section className="section featured-section">
-        <div className="section-header">
-          <div>
-            <p className="section-overline">HAND-PICKED FOR YOU</p>
-            <h2>Featured Products</h2>
+          <div className="categories-grid">
+            {categories
+              .filter((c) => c !== "All")
+              .map((cat) => (
+                <button
+                  key={cat}
+                  className="category-card"
+                  onClick={() => navigate(`/products?category=${cat}`)}
+                  aria-label={`Browse ${cat}`}
+                  style={
+                    {
+                      "--cat-bg": categoryColors[cat] || "var(--primary-light)",
+                      "--cat-color":
+                        categoryIconColors[cat] || "var(--primary)",
+                    } as React.CSSProperties
+                  }
+                >
+                  <span className="category-circle">
+                    <span
+                      className="category-icon"
+                      style={{ color: categoryIconColors[cat] }}
+                    >
+                      {categoryIcons[cat]}
+                    </span>
+                  </span>
+                  <span className="category-name">{cat}</span>
+                </button>
+              ))}
           </div>
-          <Link to="/products" className="see-all-link">See all products →</Link>
-        </div>
-        <div className="products-grid">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
+        </section>
 
-      {/* ── PROMO BANNER ── */}
-      <section className="promo-banner" aria-label="Special offer">
-        <div className="promo-banner-inner">
-          <div className="promo-text">
-            <span className="promo-overline">SPECIAL OFFER</span>
-            <h2 className="promo-title">Up to 30% off selected items</h2>
-            <p className="promo-subtitle">Limited time deals on top-rated electronics. Don't miss out.</p>
+        {/* ── FEATURED PRODUCTS ── */}
+        <section className="section featured-section">
+          <div className="section-header">
+            <div>
+              <p className="section-overline">HAND-PICKED FOR YOU</p>
+              <h2>Featured Products</h2>
+            </div>
+            <Link to="/products" className="see-all-link">
+              See all products →
+            </Link>
           </div>
-          <Link to="/products" className="btn btn-white btn-lg promo-btn">
-            View Deals →
-          </Link>
-        </div>
-      </section>
+          {loadingProducts ? (
+            <p>Loading products...</p>
+          ) : featuredProducts.length === 0 ? (
+            <p>No products are available yet.</p>
+          ) : (
+            <div className="products-grid">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </section>
 
-      {/* ── CTA ── */}
-      <section className="cta-section">
-        <div className="cta-content">
-          <h2>Ready to upgrade your setup?</h2>
-          <p>Explore hundreds of products with fast delivery and easy returns.</p>
-          <Link to="/products" className="btn btn-white btn-lg">
-            Browse All Products
-          </Link>
-        </div>
-      </section>
+        {/* ── PROMO BANNER ── */}
+        <section className="promo-banner" aria-label="Special offer">
+          <div className="promo-banner-inner">
+            <div className="promo-text">
+              <span className="promo-overline">SPECIAL OFFER</span>
+              <h2 className="promo-title">Up to 30% off selected items</h2>
+              <p className="promo-subtitle">
+                Limited time deals on top-rated electronics. Don't miss out.
+              </p>
+            </div>
+            <Link to="/products" className="btn btn-white btn-lg promo-btn">
+              View Deals →
+            </Link>
+          </div>
+        </section>
 
-      </div>{/* end home-content */}
+        {/* ── CTA ── */}
+        <section className="cta-section">
+          <div className="cta-content">
+            <h2>Ready to upgrade your setup?</h2>
+            <p>
+              Explore hundreds of products with fast delivery and easy returns.
+            </p>
+            <Link to="/products" className="btn btn-white btn-lg">
+              Browse All Products
+            </Link>
+          </div>
+        </section>
+      </div>
+      {/* end home-content */}
     </div>
   );
 }
