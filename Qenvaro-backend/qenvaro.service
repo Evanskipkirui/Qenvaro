@@ -1,0 +1,34 @@
+[Unit]
+Description=Qenvaro Backend API
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=qenvaro
+Group=qenvaro
+WorkingDirectory=/opt/qenvaro/backend
+
+# Environment file — create this on the VPS with your real secrets
+EnvironmentFile=/opt/qenvaro/backend/.env
+
+# Path to the compiled binary
+ExecStart=/opt/qenvaro/backend/qenvaro-backend
+
+# Restart policy
+Restart=on-failure
+RestartSec=5s
+
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/opt/qenvaro/backend
+
+# Stdout/stderr both go to journald (use: journalctl -u qenvaro -f)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=qenvaro
+
+[Install]
+WantedBy=multi-user.target

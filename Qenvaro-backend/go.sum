@@ -1,3 +1,7 @@
+github.com/Kernaq/SDKs/identity/go v0.0.0-20260906165234-1d97342728ff h1:BL1LU+TadYPtAU3rK/inFeVVVAV15NqB8PqwmDlA/EU=
+github.com/Kernaq/SDKs/identity/go v0.0.0-20260906165234-1d97342728ff/go.mod h1:/79R42PP8Lu/5AtFkDdmwsQktwhJ6AgeA6SE8ltBrlM=
+github.com/Kernaq/sdk-go v1.0.0 h1:+Nx6K4lLeG3oG7FQuJc3A8dcO06WtHfRiB3AYKobxRI=
+github.com/Kernaq/sdk-go v1.0.0/go.mod h1:tLV4BjJm67pjxc6b8GO/ik3HAQfeCDmWJLx1Hqym/o8=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
 github.com/bytedance/sonic v1.10.0-rc/go.mod h1:ElCzW+ufi8qKqNW0FY314xriJhyJhuoJ3gFZdAHF7NM=
 github.com/bytedance/sonic v1.10.1 h1:7a1wuFXL1cMy7a3f7/VFcEtriuXQnUBhtoVfOZiaysc=
