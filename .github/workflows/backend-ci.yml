@@ -67,4 +67,4 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           curl --fail --silent --show-error \
-            "https://${{ secrets.VPS_HOST }}/api/health"
+            "https://api.qenvaro.franciumsources.com/api/health"
