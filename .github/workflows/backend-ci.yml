@@ -1,4 +1,4 @@
-name: Qenvaro Backend CI
+name: Qenvaro Backend CI/CD
 
 on:
   push:
@@ -36,3 +36,35 @@ jobs:
 
       - name: Build application
         run: go build -o qenvaro-backend .
+
+      - name: Configure SSH
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/qenvaro_deploy
+          chmod 600 ~/.ssh/qenvaro_deploy
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Copy backend to VPS
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          scp -i ~/.ssh/qenvaro_deploy \
+            Qenvaro-backend/qenvaro-backend \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/tmp/qenvaro-backend"
+
+      - name: Deploy backend
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          ssh -i ~/.ssh/qenvaro_deploy \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            'mv /tmp/qenvaro-backend /opt/qenvaro/backend/qenvaro-backend &&
+             chown qenvaro:qenvaro /opt/qenvaro/backend/qenvaro-backend &&
+             chmod +x /opt/qenvaro/backend/qenvaro-backend &&
+             systemctl restart qenvaro &&
+             systemctl is-active --quiet qenvaro'
+
+      - name: Verify deployment
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          curl --fail --silent --show-error \
+            "https://${{ secrets.VPS_HOST }}/api/health"
